@@ -1,0 +1,99 @@
+---
+pagination:
+  data: berita
+  size: 1
+  alias: item
+permalink: "{% if pagination.pageNumber == 0 %}/index.html{% else %}/berita/{{ item.slug }}/index.html{% endif %}"
+---
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="qAz7u3yMa_Fjiu5V3W3ic34X18wtRhVsoMDHC1P4S-Q" />
+
+    <title>{{ item.judul if item else "InfoMedia - Portal Berita Digital Terkini" }}</title>
+    <meta name="description" content="{{ item.deskripsi if item else 'Portal berita terpercaya menyajikan kabar terbaru.' }}">
+    <link rel="canonical" href="https://infomediabaru.netlify.app{% if item %}/berita/{{ item.slug }}/{% endif %}">
+
+    <!-- Open Graph untuk Google & Medsos -->
+    <meta property="og:title" content="{{ item.judul if item else 'InfoMedia' }}">
+    <meta property="og:description" content="{{ item.deskripsi if item else 'Portal Berita Terkini' }}">
+    <meta property="og:image" content="{{ item.gambar if item else 'https://via.placeholder.com/1200x630' }}">
+    <meta property="og:type" content="article">
+
+    {% if item %}
+    <!-- Schema NewsArticle Tercetak Permanen Tanpa Javascript -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      "headline": "{{ item.judul }}",
+      "image": ["{{ item.gambar }}"],
+      "datePublished": "{{ item.tanggal }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ item.penulis or 'Redaksi' }}"
+      }
+    }
+    </script>
+    {% endif %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --primary-color: #e63946; --dark-color: #1d3557; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: #f4f6f8; color: #212529; line-height: 1.6; }
+        a { color: var(--dark-color); text-decoration: none; }
+        header { background: #ffffff; border-bottom: 3px solid var(--primary-color); padding: 15px; text-align: center; }
+        .logo { font-size: 30px; font-weight: 800; color: var(--primary-color); }
+        .logo span { color: var(--dark-color); }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        article.news-card { background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .category-badge { background: #e9ecef; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; }
+        .article-title { font-size: 26px; font-weight: 700; margin: 10px 0; }
+        .featured-image { width: 100%; max-height: 450px; object-fit: cover; border-radius: 6px; margin: 15px 0; }
+        .btn-back { display: inline-block; margin-top: 20px; background: var(--dark-color); color: #fff; padding: 8px 16px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><a href="/">INFO<span>MEDIA</span></a></div>
+    </header>
+
+    <div class="container">
+        {% if item %}
+        <!-- HALAMAN DETAIL ARTIKEL (Otomatis dibuatkan file HTML per artikel) -->
+        <article class="news-card">
+            <span class="category-badge">{{ item.kategori }}</span>
+            <h1 class="article-title">{{ item.judul }}</h1>
+            <p style="color:#6c757d; font-size:13px;">Oleh: {{ item.penulis }} | {{ item.tanggal }}</p>
+            
+            {% if item.gambar %}
+            <img class="featured-image" src="{{ item.gambar }}" alt="{{ item.judul }}">
+            {% endif %}
+
+            <div style="font-size: 16px; margin-top: 15px;">
+                {{ item.isi_berita or item.deskripsi }}
+            </div>
+
+            <a href="/" class="btn-back">&laquo; Kembali ke Beranda</a>
+        </article>
+        {% else %}
+        <!-- HALAMAN UTAMA / BERANDA -->
+        <h2>Berita Terbaru</h2>
+        <div style="margin-top:20px;">
+            {% for beritaItem in berita %}
+            <div style="background:#fff; padding:15px; margin-bottom:10px; border-radius:6px;">
+                <h3><a href="/berita/{{ beritaItem.slug }}/">{{ beritaItem.judul }}</a></h3>
+                <p style="font-size:13px; color:#666;">{{ beritaItem.deskripsi }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
