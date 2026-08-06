@@ -5,7 +5,7 @@ module.exports = async function() {
 
   return new Promise((resolve) => {
     https.get(SHEET_CSV_URL, (res) => {
-      // Handle redirect dari Google Sheets jika ada
+      // Handle Redirect dari Google Sheets jika ada
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         https.get(res.headers.location, (redirectRes) => {
           let data = '';
@@ -26,19 +26,14 @@ module.exports = async function() {
 };
 
 function parseCSV(csvText) {
-  if (!csvText || csvText.includes('<!DOCTYPE html>')) {
-    console.error("Data yang diterima bukan CSV Valid / Google Sheet belum di-publish ke Web");
-    return [];
-  }
+  if (!csvText || csvText.includes('<!DOCTYPE html>')) return [];
 
   const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
   if (lines.length < 2) return [];
 
-  // Ambil Header Nama Kolom (dijadikan huruf kecil semua)
   const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
 
-  const articles = lines.slice(1).reverse().map(line => {
-    // Regex fleksibel untuk memisah koma walaupun ada teks dalam tanda petik
+  return lines.slice(1).map(line => {
     const matches = line.match(/(?:[^\",]+|\"[^\"]*\")+/g) || [];
     const values = matches.map(v => v.trim().replace(/^"|"$/g, ''));
 
@@ -47,8 +42,13 @@ function parseCSV(csvText) {
       item[header] = values[index] || '';
     });
 
-    return item;
-  });
+    // Buat slug otomatis untuk URL berita yang ramah SEO Google
+    const judulRaw = item.judul || item["judul artikel"] || 'berita';
+    item.slug = judulRaw.toLowerCase().trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-');
 
-  return articles;
+    return item;
+  }).reverse();
 }
