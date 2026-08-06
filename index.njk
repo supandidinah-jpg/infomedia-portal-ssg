@@ -1,73 +1,43 @@
 ---
 pagination:
   data: berita
-  size: 1
-  alias: item
-permalink: "/berita/{{ item.slug }}/"
+  size: 10
+  alias: items
+permalink: "/"
 ---
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ item.judul or item.Judul or item["Judul Artikel"] or "Berita" }} - INFOMEDIA</title>
+  <title>INFOMEDIA - Portal Berita</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: #f4f6f9; color: #333; line-height: 1.7; }
-    
-    header { background: #111827; color: #fff; padding: 15px 0; border-bottom: 4px solid #dc2626; text-align: center; }
-    header a { color: #fff; text-decoration: none; font-size: 24px; font-weight: 800; }
-    
-    .container { max-width: 750px; margin: 20px auto; padding: 0 15px; }
-    
-    .article-box { background: #ffffff; border-radius: 10px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    
-    .btn-kembali { display: inline-block; margin-bottom: 15px; color: #dc2626; text-decoration: none; font-size: 14px; font-weight: 600; }
-    
-    .article-title { font-size: 26px; font-weight: 800; color: #111827; margin-bottom: 10px; line-height: 1.3; }
-    .article-meta { font-size: 13px; color: #6b7280; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; }
-    
-    .article-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
-    
-    .article-content { font-size: 16px; color: #1f2937; white-space: pre-line; line-height: 1.8; }
-    
-    footer { text-align: center; padding: 20px; font-size: 12px; color: #9ca3af; margin-top: 30px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #f4f6f9; color: #333; line-height: 1.6; }
+    header { background: #111827; color: #fff; text-align: center; padding: 15px; border-bottom: 4px solid #dc2626; }
+    header h1 { font-size: 24px; }
+    .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+    .card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card h2 { font-size: 18px; margin-bottom: 10px; }
+    .card h2 a { color: #111827; text-decoration: none; }
+    .card h2 a:hover { color: #dc2626; }
+    .btn-baca { display: inline-block; margin-top: 10px; background: #dc2626; color: #fff; padding: 8px 14px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: bold; }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="/">INFOMEDIA</a>
+    <h1>INFOMEDIA</h1>
   </header>
 
   <div class="container">
-    <div class="article-box">
-      <a href="/" class="btn-kembali">&larr; Kembali ke Beranda</a>
-      
-      {% set judulFix = item.judul or item.Judul or item["Judul Artikel"] or item.title %}
-      {% set gambarFix = item.gambar or item.Gambar or item.image or item["URL Gambar"] %}
-      {% set isiFix = item.isi or item.Isi or item.konten or item.Konten or item["Isi Berita"] or item.deskripsi or item.body %}
-      {% set penulisFix = item.penulis or item.Penulis or item.author or "Supandi" %}
-
-      <h1 class="article-title">{{ judulFix }}</h1>
-      
-      <div class="article-meta">
-        Oleh <strong>{{ penulisFix }}</strong>
-      </div>
-
-      {% if gambarFix %}
-        <img class="article-img" src="{{ gambarFix }}" alt="{{ judulFix }}">
-      {% endif %}
-
-      <div class="article-content">
-        {{ isiFix }}
-      </div>
-    </div>
+    {% for item in items %}
+      <article class="card">
+        <h2><a href="/berita/{{ item.slug }}/">{{ item.judul or item.Judul or "Judul Artikel" }}</a></h2>
+        <a href="/berita/{{ item.slug }}/" class="btn-baca">Baca Selengkapnya &rarr;</a>
+      </article>
+    {% endfor %}
   </div>
-
-  <footer>
-    &copy; 2026 INFOMEDIA. All rights reserved.
-  </footer>
 
 </body>
 </html>
