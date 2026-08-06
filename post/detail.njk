@@ -3,7 +3,7 @@ pagination:
   data: berita
   size: 1
   alias: news
-permalink: "/posts/{{ news.slug }}/index.html"
+permalink: "/posts/{% if news.slug %}{{ news.slug }}{% else %}artikel-{{ pagination.pageNumber + 1 }}{% endif %}/index.html"
 ---
 <!DOCTYPE html>
 <html lang="id">
@@ -11,15 +11,11 @@ permalink: "/posts/{{ news.slug }}/index.html"
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>{{ news.judul }} - INFOMEDIA</title>
+  <title>{{ news.judul if news.judul else "Artikel" }} - INFOMEDIA</title>
+  {% if news.isi_berita %}
   <meta name="description" content="{{ news.isi_berita | truncate(150) }}">
+  {% endif %}
   
-  <!-- Open Graph untuk SEO Google & Medsos -->
-  <meta property="og:title" content="{{ news.judul }}">
-  <meta property="og:description" content="{{ news.isi_berita | truncate(150) }}">
-  <meta property="og:image" content="{{ news.gambar }}">
-  <meta property="og:type" content="article">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -45,11 +41,12 @@ permalink: "/posts/{{ news.slug }}/index.html"
   </header>
 
   <div class="container">
-    <span class="badge">{{ news.kategori }}</span>
-    <h1>{{ news.judul }}</h1>
+    <span class="badge">{{ news.kategori if news.kategori else "BERITA" }}</span>
+    <h1>{{ news.judul if news.judul else "Tanpa Judul" }}</h1>
     
     <div class="meta">
-      Oleh: <strong>{{ news.penulis }}</strong> {% if news.tanggal %}| Dipublikasikan: {{ news.tanggal }}{% endif %}
+      Oleh: <strong>{{ news.penulis if news.penulis else "Supandi" }}</strong> 
+      {% if news.tanggal %}| Dipublikasikan: {{ news.tanggal }}{% endif %}
     </div>
 
     {% if news.gambar %}
