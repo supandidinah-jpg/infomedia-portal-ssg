@@ -1,7 +1,7 @@
 ---
 pagination:
   data: berita
-  size: 20
+  size: 50
   alias: items
 permalink: "/"
 ---
@@ -10,60 +10,94 @@ permalink: "/"
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>InfoMedia - Portal Berita Digital Terkini</title>
+  <title>INFOMEDIA - Portal Berita Terkini</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
-    :root { --primary: #e63946; --dark: #1d3557; --bg: #f4f6f8; }
+    :root {
+      --primary: #e63946;
+      --dark: #1d3557;
+      --bg: #f4f6f8;
+      --border: #e9ecef;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background: var(--bg); color: #212529; line-height: 1.6; }
-    header { background: #fff; border-bottom: 3px solid var(--primary); padding: 15px; text-align: center; }
-    .logo { font-size: 28px; font-weight: 800; color: var(--primary); text-decoration: none; }
-    .logo span { color: var(--dark); }
-    .container { max-width: 850px; margin: 25px auto; padding: 0 15px; }
-    .news-card { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .badge { background: #fee2e2; color: var(--primary); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
-    .news-title { font-size: 20px; margin: 8px 0; }
+    body { background-color: var(--bg); color: #212529; line-height: 1.6; }
+
+    header { background: var(--dark); border-bottom: 3px solid var(--primary); padding: 18px 0; text-align: center; }
+    .logo { font-size: 28px; font-weight: 800; color: #ffffff; letter-spacing: 1px; text-decoration: none; text-transform: uppercase; }
+
+    .container { max-width: 800px; margin: 25px auto; padding: 0 15px; }
+
+    .news-card { background: #ffffff; padding: 22px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 25px; }
+    .badge { display: inline-block; background: #fee2e2; color: var(--primary); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 10px; }
+    
+    .news-title { font-size: 22px; font-weight: 800; color: var(--dark); margin-bottom: 8px; line-height: 1.35; }
     .news-title a { color: var(--dark); text-decoration: none; }
     .news-title a:hover { color: var(--primary); }
-    .meta { font-size: 12px; color: #6c757d; margin-bottom: 12px; }
-    .featured-img { width: 100%; max-height: 380px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; display: block; }
-    .btn-more { display: inline-block; background: var(--dark); color: #fff; font-size: 13px; padding: 6px 12px; border-radius: 4px; text-decoration: none; margin-top: 8px; }
+
+    .meta { font-size: 12.5px; font-weight: 500; color: #6c757d; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6px 0; margin-bottom: 15px; }
+
+    .featured-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 6px; display: block; margin-bottom: 6px; }
+    .caption { font-size: 11px; color: #888; font-style: italic; margin-bottom: 15px; }
+
+    .description { font-size: 15px; color: #333; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 15px; }
+
+    .btn-more { display: inline-block; background: var(--dark); color: #fff; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 5px; text-decoration: none; }
+    .btn-more:hover { background: var(--primary); }
+
+    footer { background: var(--dark); color: #ffffff; padding: 20px; text-align: center; font-size: 13px; margin-top: 40px; }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="/" class="logo">INFO<span>MEDIA</span></a>
+    <a href="/" class="logo">INFOMEDIA</a>
   </header>
 
   <div class="container">
-    <h2 style="font-size: 18px; color: var(--dark); margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 10px;">BERITA TERBARU</h2>
-
     {% for item in items %}
-      {% set valJudul = item.judul or item["judul artikel"] %}
-      {% set valGambar = item.gambar or item["url gambar"] %}
-      {% set valDeskripsi = item.deskripsi or item.isi or item["isi berita"] %}
       {% set postUrl = "/posts/" + item.slug + "/" %}
 
       <article class="news-card">
-        <span class="badge">{{ item.kategori or "BERITA" }}</span>
-        <h3 class="news-title"><a href="{{ postUrl }}">{{ valJudul }}</a></h3>
-        <div class="meta">Oleh: <strong>{{ item.penulis or "Redaksi" }}</strong> | {{ item.tanggal }}</div>
+        <span class="badge">{{ item.kategori }}</span>
         
-        {% if valGambar %}
-          <a href="{{ postUrl }}"><img class="featured-img" src="{{ valGambar }}" alt="{{ valJudul }}"></a>
+        <h2 class="news-title">
+          <a href="{{ postUrl }}">{{ item.judul }}</a>
+        </h2>
+        
+        <div class="meta">
+          Oleh: <strong>{{ item.penulis }}</strong>
+          {% if item.tanggal %} | Dipublikasikan: {{ item.tanggal }}{% endif %}
+        </div>
+
+        {% if item.gambar %}
+          <a href="{{ postUrl }}">
+            <img class="featured-img" src="{{ item.gambar }}" alt="{{ item.judul }}">
+          </a>
+          {% if item.caption %}
+            <div class="caption">{{ item.caption }}</div>
+          {% endif %}
         {% endif %}
 
-        <p style="font-size: 14.5px; color: #444;">{{ valDeskripsi | truncate(160) }}</p>
+        <div class="description">
+          <p>{{ item.isi_berita }}</p>
+        </div>
+
         <a href="{{ postUrl }}" class="btn-more">Baca Selengkapnya &raquo;</a>
       </article>
     {% else %}
-      <p style="text-align: center; padding: 30px; background: #fff;">Belum ada artikel.</p>
+      <div style="text-align: center; padding: 40px; background: #fff; border-radius: 8px;">
+        <p>Belum ada artikel yang dapat ditampilkan.</p>
+      </div>
     {% endfor %}
   </div>
+
+  <footer>
+    &copy; 2026 INFOMEDIA Digital. All Rights Reserved.
+  </footer>
 
 </body>
 </html>
