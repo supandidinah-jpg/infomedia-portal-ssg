@@ -35,13 +35,16 @@ permalink: "/"
 
   <div class="container">
     {% for item in items %}
+      {% set teksIsi = item.isi or item.konten or item.Isi or item.isi_berita or "" %}
+      {% set gambarBerita = item.gambar or item.Gambar or item.image %}
+      
       <article class="card">
-        {% if item.gambar %}
-          <img src="{{ item.gambar }}" alt="{{ item.judul }}">
+        {% if gambarBerita %}
+          <img src="{{ gambarBerita }}" alt="{{ item.judul or item.Judul }}">
         {% endif %}
-        <h2><a href="/berita/{{ item.slug }}/">{{ item.judul }}</a></h2>
-        <div class="meta">Oleh: {{ item.penulis or "Admin" }}</div>
-        <p>{{ item.isi | truncate(150) }}</p>
+        <h2><a href="/berita/{{ item.slug }}/">{{ item.judul or item.Judul }}</a></h2>
+        <div class="meta">Oleh: {{ item.penulis or item.Penulis or "Supandi" }}</div>
+        <p>{{ teksIsi | truncate(150) }}</p>
         <a href="/berita/{{ item.slug }}/" class="btn-baca">Baca Selengkapnya &rarr;</a>
       </article>
     {% endfor %}
