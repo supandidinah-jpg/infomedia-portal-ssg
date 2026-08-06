@@ -10,95 +10,60 @@ permalink: "/"
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INFOMEDIA - Portal Berita Digital Terkini</title>
+  <title>InfoMedia - Portal Berita Digital Terkini</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
-    :root {
-      --primary-color: #e63946;
-      --dark-color: #1d3557;
-      --bg-color: #f4f6f8;
-      --text-color: #212529;
-      --border-color: #e9ecef;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
-
-    /* Header */
-    header { background: #ffffff; border-bottom: 3px solid var(--primary-color); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    .header-container { max-width: 900px; margin: 0 auto; padding: 15px; text-align: center; }
-    .logo { font-size: 28px; font-weight: 800; color: var(--primary-color); letter-spacing: -1px; text-decoration: none; }
-    .logo span { color: var(--dark-color); }
-
-    /* Main Container */
+    :root { --primary: #e63946; --dark: #1d3557; --bg: #f4f6f8; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background: var(--bg); color: #212529; line-height: 1.6; }
+    header { background: #fff; border-bottom: 3px solid var(--primary); padding: 15px; text-align: center; }
+    .logo { font-size: 28px; font-weight: 800; color: var(--primary); text-decoration: none; }
+    .logo span { color: var(--dark); }
     .container { max-width: 850px; margin: 25px auto; padding: 0 15px; }
-    .category-header-title { font-size: 18px; font-weight: 700; color: var(--dark-color); border-left: 4px solid var(--primary-color); padding-left: 10px; margin-bottom: 20px; text-transform: uppercase; }
-
-    /* Card Berita */
-    article.news-card { background: #ffffff; padding: 22px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 22px; }
-    .category-badge { display: inline-block; background: #fee2e2; color: var(--primary-color); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-bottom: 10px; }
-    
-    .article-title { font-size: 22px; font-weight: 700; line-height: 1.35; color: var(--dark-color); margin-bottom: 8px; }
-    .article-meta { font-size: 12.5px; font-weight: 500; color: #6c757d; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 6px 0; margin-bottom: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
-
-    /* Gambar Berita */
-    .featured-image { width: 100%; max-height: 420px; border-radius: 6px; object-fit: cover; display: block; margin-bottom: 14px; }
-
-    /* Isi & Deskripsi */
-    .article-summary p { font-size: 15.5px; font-weight: 400; color: #2b2d42; line-height: 1.6; margin-bottom: 12px; white-space: pre-line; }
-
-    footer { background: var(--dark-color); color: #ffffff; margin-top: 40px; padding: 25px 0; text-align: center; font-size: 13px; }
+    .news-card { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .badge { background: #fee2e2; color: var(--primary); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+    .news-title { font-size: 20px; margin: 8px 0; }
+    .news-title a { color: var(--dark); text-decoration: none; }
+    .news-title a:hover { color: var(--primary); }
+    .meta { font-size: 12px; color: #6c757d; margin-bottom: 12px; }
+    .featured-img { width: 100%; max-height: 380px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; display: block; }
+    .btn-more { display: inline-block; background: var(--dark); color: #fff; font-size: 13px; padding: 6px 12px; border-radius: 4px; text-decoration: none; margin-top: 8px; }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="header-container">
-      <a href="/" class="logo">INFO<span>MEDIA</span></a>
-    </div>
+    <a href="/" class="logo">INFO<span>MEDIA</span></a>
   </header>
 
   <div class="container">
-    <div class="category-header-title">Berita Utama & Terbaru</div>
+    <h2 style="font-size: 18px; color: var(--dark); margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 10px;">BERITA TERBARU</h2>
 
     {% for item in items %}
-      {% set valJudul = item.judul or item.Judul or item["Judul Artikel"] or item.title %}
-      {% set valKategori = item.kategori or item.Kategori or "BERITA" %}
-      {% set valPenulis = item.penulis or item.Penulis or "Supandi" %}
-      {% set valTanggal = item.tanggal or item.Tanggal or "" %}
-      {% set valGambar = item.gambar or item.Gambar or item.image or item["URL Gambar"] %}
-      {% set valIsi = item.isi or item.Isi or item.isi_berita or item["Isi Berita"] or item.deskripsi or item.Deskripsi %}
+      {% set valJudul = item.judul or item["judul artikel"] %}
+      {% set valGambar = item.gambar or item["url gambar"] %}
+      {% set valDeskripsi = item.deskripsi or item.isi or item["isi berita"] %}
+      {% set postUrl = "/posts/" + item.slug + "/" %}
 
       <article class="news-card">
-        <span class="category-badge">{{ valKategori }}</span>
+        <span class="badge">{{ item.kategori or "BERITA" }}</span>
+        <h3 class="news-title"><a href="{{ postUrl }}">{{ valJudul }}</a></h3>
+        <div class="meta">Oleh: <strong>{{ item.penulis or "Redaksi" }}</strong> | {{ item.tanggal }}</div>
         
-        <h2 class="article-title">{{ valJudul }}</h2>
-        
-        <div class="article-meta">
-          <span>Oleh: <strong>{{ valPenulis }}</strong></span>
-          {% if valTanggal %}
-            <span>|</span>
-            <span>Dipublikasikan: {{ valTanggal }}</span>
-          {% endif %}
-        </div>
-
         {% if valGambar %}
-          <img class="featured-image" src="{{ valGambar }}" alt="{{ valJudul }}">
+          <a href="{{ postUrl }}"><img class="featured-img" src="{{ valGambar }}" alt="{{ valJudul }}"></a>
         {% endif %}
 
-        <div class="article-summary">
-          <p>{{ valIsi }}</p>
-        </div>
+        <p style="font-size: 14.5px; color: #444;">{{ valDeskripsi | truncate(160) }}</p>
+        <a href="{{ postUrl }}" class="btn-more">Baca Selengkapnya &raquo;</a>
       </article>
+    {% else %}
+      <p style="text-align: center; padding: 30px; background: #fff;">Belum ada artikel.</p>
     {% endfor %}
   </div>
-
-  <footer>
-    &copy; 2026 InfoMedia Digital. All Rights Reserved.
-  </footer>
 
 </body>
 </html>
