@@ -1,43 +1,28 @@
----
-pagination:
-  data: berita
-  size: 10
-  alias: items
-permalink: "/"
----
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INFOMEDIA - Portal Berita Terkini</title>
+  <title>{{ item.judul or item.Judul }} - INFOMEDIA</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: #f4f6f9; color: #333; line-height: 1.6; }
+    body { background-color: #f4f6f9; color: #333; line-height: 1.7; }
     
-    /* Header & Nav */
     header { background: #111827; color: #fff; padding: 15px 0; border-bottom: 4px solid #dc2626; text-align: center; }
-    header h1 { font-size: 26px; font-weight: 800; letter-spacing: 1px; }
+    header a { color: #fff; text-decoration: none; font-size: 24px; font-weight: 800; }
     
-    /* Container Layout */
-    .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+    .container { max-width: 750px; margin: 20px auto; padding: 0 15px; }
     
-    /* Card Feed Berita */
-    .card { background: #ffffff; border-radius: 10px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: transform 0.2s; }
-    .card-body { padding: 20px; }
-    .card-img { width: 100%; max-height: 380px; object-fit: cover; display: block; }
+    .article-box { background: #ffffff; border-radius: 10px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     
-    .card-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
-    .card-title a { color: #111827; text-decoration: none; }
-    .card-title a:hover { color: #dc2626; }
+    .btn-kembali { display: inline-block; margin-bottom: 15px; color: #dc2626; text-decoration: none; font-size: 14px; font-weight: 600; }
     
-    .card-meta { font-size: 13px; color: #6b7280; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .badge { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+    .article-title { font-size: 26px; font-weight: 800; color: #111827; margin-bottom: 10px; line-height: 1.3; }
+    .article-meta { font-size: 13px; color: #6b7280; margin-bottom: 20px; border-bottom: 1px solid #e5e7eb; padding-bottom: 12px; }
     
-    .card-excerpt { font-size: 14px; color: #4b5563; margin-bottom: 16px; line-height: 1.5; }
+    .article-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
     
-    .btn-baca { display: inline-block; background: #dc2626; color: #ffffff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; transition: background 0.2s; }
-    .btn-baca:hover { background: #b91c1c; }
+    .article-content { font-size: 16px; color: #1f2937; white-space: pre-line; }
     
     footer { text-align: center; padding: 20px; font-size: 12px; color: #9ca3af; margin-top: 30px; }
   </style>
@@ -45,36 +30,28 @@ permalink: "/"
 <body>
 
   <header>
-    <h1>INFOMEDIA</h1>
+    <a href="/">INFOMEDIA</a>
   </header>
 
   <div class="container">
-    {% for item in items %}
-      {% set teksIsi = item.isi or item.konten or item.Isi or item.isi_berita or "" %}
-      {% set gambarBerita = item.gambar or item.Gambar or item.image %}
-      {% set judulBerita = item.judul or item.Judul or "Berita Terbaru" %}
+    <div class="article-box">
+      <a href="/" class="btn-kembali">&larr; Kembali ke Beranda</a>
       
-      <article class="card">
-        {% if gambarBerita %}
-          <img class="card-img" src="{{ gambarBerita }}" alt="{{ judulBerita }}">
-        {% endif %}
-        
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="badge">BERITA</span>
-            <span>Oleh: {{ item.penulis or item.Penulis or "Supandi" }}</span>
-          </div>
-          
-          <h2 class="card-title">
-            <a href="/berita/{{ item.slug }}/">{{ judulBerita }}</a>
-          </h2>
-          
-          <p class="card-excerpt">{{ teksIsi | truncate(160) }}</p>
-          
-          <a href="/berita/{{ item.slug }}/" class="btn-baca">Baca Selengkapnya &rarr;</a>
-        </div>
-      </article>
-    {% endfor %}
+      <h1 class="article-title">{{ item.judul or item.Judul }}</h1>
+      
+      <div class="article-meta">
+        Oleh <strong>{{ item.penulis or item.Penulis or "Supandi" }}</strong>
+      </div>
+
+      {% set gambarBerita = item.gambar or item.Gambar or item.image %}
+      {% if gambarBerita %}
+        <img class="article-img" src="{{ gambarBerita }}" alt="{{ item.judul or item.Judul }}">
+      {% endif %}
+
+      <div class="article-content">
+        {{ item.isi or item.konten or item.Isi or item.isi_berita }}
+      </div>
+    </div>
   </div>
 
   <footer>
