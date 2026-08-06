@@ -1,9 +1,16 @@
+---
+pagination:
+  data: berita
+  size: 1
+  alias: item
+permalink: "/berita/{{ item.slug }}/"
+---
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ item.judul or item.Judul }} - INFOMEDIA</title>
+  <title>{{ item.judul or item.Judul or item["Judul Artikel"] or "Berita" }} - INFOMEDIA</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background-color: #f4f6f9; color: #333; line-height: 1.7; }
@@ -22,7 +29,7 @@
     
     .article-img { width: 100%; max-height: 420px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
     
-    .article-content { font-size: 16px; color: #1f2937; white-space: pre-line; }
+    .article-content { font-size: 16px; color: #1f2937; white-space: pre-line; line-height: 1.8; }
     
     footer { text-align: center; padding: 20px; font-size: 12px; color: #9ca3af; margin-top: 30px; }
   </style>
@@ -37,19 +44,23 @@
     <div class="article-box">
       <a href="/" class="btn-kembali">&larr; Kembali ke Beranda</a>
       
-      <h1 class="article-title">{{ item.judul or item.Judul }}</h1>
+      {% set judulFix = item.judul or item.Judul or item["Judul Artikel"] or item.title %}
+      {% set gambarFix = item.gambar or item.Gambar or item.image or item["URL Gambar"] %}
+      {% set isiFix = item.isi or item.Isi or item.konten or item.Konten or item["Isi Berita"] or item.deskripsi or item.body %}
+      {% set penulisFix = item.penulis or item.Penulis or item.author or "Supandi" %}
+
+      <h1 class="article-title">{{ judulFix }}</h1>
       
       <div class="article-meta">
-        Oleh <strong>{{ item.penulis or item.Penulis or "Supandi" }}</strong>
+        Oleh <strong>{{ penulisFix }}</strong>
       </div>
 
-      {% set gambarBerita = item.gambar or item.Gambar or item.image %}
-      {% if gambarBerita %}
-        <img class="article-img" src="{{ gambarBerita }}" alt="{{ item.judul or item.Judul }}">
+      {% if gambarFix %}
+        <img class="article-img" src="{{ gambarFix }}" alt="{{ judulFix }}">
       {% endif %}
 
       <div class="article-content">
-        {{ item.isi or item.konten or item.Isi or item.isi_berita }}
+        {{ isiFix }}
       </div>
     </div>
   </div>
