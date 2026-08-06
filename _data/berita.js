@@ -5,7 +5,7 @@ module.exports = async function() {
 
   return new Promise((resolve) => {
     https.get(SHEET_CSV_URL, (res) => {
-      // Handle Redirect dari Google Sheets jika ada
+      // Handle Redirect dari Google Sheets
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         https.get(res.headers.location, (redirectRes) => {
           let data = '';
@@ -28,27 +28,32 @@ module.exports = async function() {
 function parseCSV(csvText) {
   if (!csvText || csvText.includes('<!DOCTYPE html>')) return [];
 
-  const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+  // Pisahkan baris dengan regex yang aman dari enter di dalam teks berita
+  const lines = csvText.split(/\r?\n(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/).filter(line => line.trim() !== '');
   if (lines.length < 2) return [];
 
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, '').toLowerCase());
-
+  // Header dari Google Sheets: judul, kategori, tanggal, penulis, gambar, deskripsi, deskripsi_2, isi_berita
   return lines.slice(1).map(line => {
+    // Regex split koma yang aman untuk sel dengan koma/tanda petik
     const matches = line.match(/(?:[^\",]+|\"[^\"]*\")+/g) || [];
-    const values = matches.map(v => v.trim().replace(/^"|"$/g, ''));
+    const values = matches.map(v => v.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
 
-    let item = {};
-    headers.forEach((header, index) => {
-      item[header] = values[index] || '';
-    });
+    const item = {
+      judul: values[0] || '',
+      kategori: values[1] || 'BERITA',
+      tanggal: values[2] || '',
+      penulis: values[3] || 'Redaksi',
+      gambar: values[4] || '',
+      caption: values[6] || '',      // Kolom G (deskripsi kedua/sumber foto)
+      isi_berita: values[7] || ''   // Kolom H (isi berita utama)
+    };
 
-    // Buat slug otomatis untuk URL berita yang ramah SEO Google
-    const judulRaw = item.judul || item["judul artikel"] || 'berita';
-    item.slug = judulRaw.toLowerCase().trim()
+    // Buat slug otomatis dari judul untuk URL SEO Google
+    item.slug = item.judul.toLowerCase().trim()
       .replace(/\s+/g, '-')
       .replace(/[^\w\-]+/g, '')
       .replace(/\-\-+/g, '-');
 
     return item;
-  }).reverse();
+  }).filter(item => item.judul !== '').reverse();
 }
