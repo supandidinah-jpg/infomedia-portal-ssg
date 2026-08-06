@@ -1,7 +1,7 @@
 const Papa = require('papaparse');
 
 module.exports = async function() {
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT0R-H3PkvgbIGzPXyTWPi9pWOg0DFtsgWQcKlvbkbcRF-V9ClJqwUObdHXKcM4U8mG2H7wcO-9lSSR/pub?output=csv';
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOR-H3PkvgbIGzPxTWPi9pW0OD8_R85gI54eE79fTq5t_HwO2QxP8cQkO_B4x7vX_b33Qx8Q_72w_/pub?output=csv'; // Sesuaikan URL CSV kamu jika beda
 
   const response = await fetch(SHEET_CSV_URL);
   const csvText = await response.text();
@@ -17,7 +17,7 @@ module.exports = async function() {
             .replace(/\s+/g, '-')
             .replace(/[^\w\-]+/g, '')
             .replace(/\-\-+/g, '-');
-          
+
           return { ...item, slug };
         });
         resolve(articles);
