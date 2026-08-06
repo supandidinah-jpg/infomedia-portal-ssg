@@ -11,17 +11,13 @@ permalink: "/posts/{{ news.slug }}/index.html"
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  {% set valJudul = news.judul or news["judul artikel"] %}
-  {% set valDeskripsi = news.deskripsi or news.isi or news["isi berita"] %}
-  {% set valGambar = news.gambar or news["url gambar"] %}
+  <title>{{ news.judul }} - INFOMEDIA</title>
+  <meta name="description" content="{{ news.isi_berita | truncate(150) }}">
   
-  <title>{{ valJudul }} - InfoMedia</title>
-  <meta name="description" content="{{ valDeskripsi | truncate(150) }}">
-  
-  <!-- Open Graph untuk Google & Sosial Media -->
-  <meta property="og:title" content="{{ valJudul }}">
-  <meta property="og:description" content="{{ valDeskripsi | truncate(150) }}">
-  <meta property="og:image" content="{{ valGambar }}">
+  <!-- Open Graph untuk SEO Google & Medsos -->
+  <meta property="og:title" content="{{ news.judul }}">
+  <meta property="og:description" content="{{ news.isi_berita | truncate(150) }}">
+  <meta property="og:image" content="{{ news.gambar }}">
   <meta property="og:type" content="article">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,38 +26,41 @@ permalink: "/posts/{{ news.slug }}/index.html"
 
   <style>
     body { font-family: 'Inter', sans-serif; background: #f4f6f8; color: #212529; line-height: 1.6; margin: 0; padding: 0; }
-    header { background: #fff; border-bottom: 3px solid #e63946; padding: 15px; text-align: center; }
-    .logo { font-size: 24px; font-weight: 800; color: #e63946; text-decoration: none; }
-    .logo span { color: #1d3557; }
-    .container { max-width: 800px; margin: 25px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    header { background: #1d3557; border-bottom: 3px solid #e63946; padding: 18px 0; text-align: center; }
+    .logo { font-size: 26px; font-weight: 800; color: #fff; text-decoration: none; letter-spacing: 1px; }
+    .container { max-width: 800px; margin: 25px auto; padding: 25px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
     .badge { background: #fee2e2; color: #e63946; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
-    h1 { font-size: 26px; color: #1d3557; margin: 10px 0; }
-    .meta { font-size: 13px; color: #6c757d; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 8px 0; margin-bottom: 15px; }
-    .featured-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
-    .content p { font-size: 16px; margin-bottom: 15px; text-align: justify; white-space: pre-line; }
-    .btn-back { display: inline-block; background: #1d3557; color: #fff; padding: 8px 16px; border-radius: 4px; text-decoration: none; margin-top: 20px; font-size: 14px; }
+    h1 { font-size: 26px; font-weight: 800; color: #1d3557; margin: 12px 0 8px 0; line-height: 1.35; }
+    .meta { font-size: 13px; color: #6c757d; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 8px 0; margin-bottom: 20px; }
+    .featured-img { width: 100%; max-height: 450px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; }
+    .caption { font-size: 12px; color: #888; font-style: italic; margin-bottom: 20px; }
+    .content p { font-size: 16px; margin-bottom: 18px; text-align: justify; white-space: pre-line; line-height: 1.7; color: #2b2d42; }
+    .btn-back { display: inline-block; background: #1d3557; color: #fff; padding: 9px 18px; border-radius: 5px; text-decoration: none; margin-top: 20px; font-size: 14px; font-weight: 600; }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="/" class="logo">INFO<span>MEDIA</span></a>
+    <a href="/" class="logo">INFOMEDIA</a>
   </header>
 
   <div class="container">
-    <span class="badge">{{ news.kategori or "BERITA" }}</span>
-    <h1>{{ valJudul }}</h1>
+    <span class="badge">{{ news.kategori }}</span>
+    <h1>{{ news.judul }}</h1>
     
     <div class="meta">
-      Oleh: <strong>{{ news.penulis or "Redaksi" }}</strong> | Dipublikasikan: {{ news.tanggal or "Terbaru" }}
+      Oleh: <strong>{{ news.penulis }}</strong> {% if news.tanggal %}| Dipublikasikan: {{ news.tanggal }}{% endif %}
     </div>
 
-    {% if valGambar %}
-      <img class="featured-img" src="{{ valGambar }}" alt="{{ valJudul }}">
+    {% if news.gambar %}
+      <img class="featured-img" src="{{ news.gambar }}" alt="{{ news.judul }}">
+      {% if news.caption %}
+        <div class="caption">{{ news.caption }}</div>
+      {% endif %}
     {% endif %}
 
     <div class="content">
-      <p>{{ valDeskripsi }}</p>
+      <p>{{ news.isi_berita }}</p>
     </div>
 
     <a href="/" class="btn-back">&laquo; Kembali ke Beranda</a>
