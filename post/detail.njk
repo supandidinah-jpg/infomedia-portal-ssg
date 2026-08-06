@@ -11,7 +11,7 @@ permalink: "/posts/{% if news.slug %}{{ news.slug }}{% else %}artikel-{{ paginat
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>{{ news.judul if news.judul else "Artikel" }} - INFOMEDIA</title>
+  <title>{{ news.judul if news.judul else "Detail Artikel" }} - INFOMEDIA</title>
   {% if news.isi_berita %}
   <meta name="description" content="{{ news.isi_berita | truncate(150) }}">
   {% endif %}
@@ -45,7 +45,7 @@ permalink: "/posts/{% if news.slug %}{{ news.slug }}{% else %}artikel-{{ paginat
     <h1>{{ news.judul if news.judul else "Tanpa Judul" }}</h1>
     
     <div class="meta">
-      Oleh: <strong>{{ news.penulis if news.penulis else "Supandi" }}</strong> 
+      Oleh: <strong>{{ news.penulis if news.penulis else "Redaksi" }}</strong> 
       {% if news.tanggal %}| Dipublikasikan: {{ news.tanggal }}{% endif %}
     </div>
 
